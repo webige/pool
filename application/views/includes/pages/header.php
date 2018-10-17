@@ -18,6 +18,20 @@
         <link href="<?php echo base_url(); ?>assets/css/icons.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/pages.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/responsive.css" rel="stylesheet" type="text/css" />
+<!--        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+<!--  <style>
+  .sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  .sortable .item { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+  .sortable .item iframe { position: absolute; margin-left: -1.3em; }
+
+  .sortable .item:hover {
+    cursor: pointer;
+}
+
+.sortable .item{
+    cursor: move;
+}
+  </style>-->
 
 
         <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -34,7 +48,8 @@
                 obj.style.height = parseInt(obj.contentWindow.document.body.scrollHeight) + add + 'px';
             }
         </script>
-
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/detect.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/fastclick.js"></script>
