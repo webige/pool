@@ -36,7 +36,7 @@
 
     <!-- content -->
     <script>
-        $(function () {
+        $( document ).ready(function() {
 
             $('.container').sortable({
 

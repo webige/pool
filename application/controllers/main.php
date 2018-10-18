@@ -28,7 +28,7 @@ class main extends CI_Controller {
             return false;
         }
         $this->load->model('mainmodel');
-        $data['iframes'] = $this->mainmodel->getIframePositions(); 
+        $data['iframes'] = $this->mainmodel->getIframePositions();
         $data['title'] = 'dashboard';
         $data['view'] = 'dashboard';
         $data['view_pg'] = 'dashboard';
@@ -36,21 +36,24 @@ class main extends CI_Controller {
         $this->load->view('index', $data);
     }
 
-    public function iframes_json(){
+    public function iframes_json() {
         $this->load->model('mainmodel');
-        $json_ids = $this->input->post('ids');
- 
-        if ($json_ids){
-            
-            $ids = $json_ids;
-            if (is_array($ids)){
-                if ($this->mainmodel->hasUserPosition()){
-                $this->mainmodel->updateIframePositions($ids);
-                }else{
-                $this->mainmodel->setIframePositions($ids);    
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            $json_ids = $this->input->post('ids');
+
+            if ($json_ids) {
+
+                $ids = $json_ids;
+                if (is_array($ids)) {
+                    if ($this->mainmodel->hasUserPosition()) {
+                        $this->mainmodel->updateIframePositions($ids);
+                    } else {
+                        $this->mainmodel->setIframePositions($ids);
+                    }
                 }
             }
         }
         die;
     }
+
 }
