@@ -12,8 +12,8 @@
                     if (isset($iframes[$i])) {
                         ?>
                         <div class="item" id="<?php echo $i; ?>">
-                            ff
-                            <iframe src="<?php echo base_url() . $iframes[$i] ?>/" style="border:none; width: 100%;" frameborder="0" scrolling="no" onload="resizeIframe(this, <?php echo $i == 3 ? 420 : 0; ?>)"></iframe>
+                            Move from here
+                            <iframe src="<?php echo base_url() . $iframes[$i] ?>/" style="border:none; width: 100%;" frameborder="0" scrolling="no" onload="resizeIframe(this, <?php echo $iframes[$i] == 'hashratemonitor' ? 420 : 0; ?>)"></iframe>
 
                         </div>
                         <?php
