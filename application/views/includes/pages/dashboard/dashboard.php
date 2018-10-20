@@ -31,15 +31,14 @@
              */
             ?>
         </div> <!-- container -->
-
+        <input type="hidden" id="desctop" value="<?php echo $this->input->get('d') ? $this->input->get('d') : $usd->desctop; ?>"/>
     </div>
 
     <!-- content -->
     <script>
-        $( document ).ready(function() {
+        $(document).ready(function () {
 
             $('.container').sortable({
-
                 stop: function (event, ui) {
                     var elm = $(".item").toArray();
                     var ids = [];
@@ -51,11 +50,16 @@
                     });
                     console.log(ids)
                     if (ids) {
+
                         $.ajax({
                             method: "POST",
                             url: '<?php echo base_url(); ?>main/iframes_json',
-                            data: {ids: ids}
-
+                            data: {ids: ids, desctop: $("#desctop").val()},
+                            dataType: "text",
+                            error: function (request, error) {
+                                console.log(arguments);
+                                alert(" Can't do because: " + error);
+                            },
                         })
                     }
                 }

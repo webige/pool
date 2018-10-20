@@ -21,34 +21,54 @@ class main extends CI_Controller {
      */
     public function index() {
         $user = $this->session->userdata('user');
-        ;
+        
 
         if (!isset($user) || empty($user)) {
             redirect(base_url() . 'auth');
             return false;
         }
+        
+                $this->load->helper('userdesctop');
+        
+        $usd = getDesctop($user->id);
+        if ($this->input->get('d')){
+            $d_arr = array(1,2,3);
+            $desctop = $this->input->get('d');
+            if (!in_array($desctop,$d_arr)){
+                $desctop = 1;
+            }
+        }else{
+            $desctop = $usd->desctop;
+        }
+
         $this->load->model('mainmodel');
-        $data['iframes'] = $this->mainmodel->getIframePositions();
+
+        $data['iframes'] = $this->mainmodel->getIframePositions($desctop);
         $data['title'] = 'dashboard';
         $data['view'] = 'dashboard';
         $data['view_pg'] = 'dashboard';
-
+        $data['user'] = $user;
+        $data['usd'] = $usd;
         $this->load->view('index', $data);
     }
 
     public function iframes_json() {
         $this->load->model('mainmodel');
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            $d_arr = array(1,2,3);
             $json_ids = $this->input->post('ids');
-
+            $desctop = $this->input->post('desctop');
+            if (!in_array($desctop,$d_arr)){
+                $desctop = 1;
+            }
             if ($json_ids) {
 
                 $ids = $json_ids;
                 if (is_array($ids)) {
-                    if ($this->mainmodel->hasUserPosition()) {
-                        $this->mainmodel->updateIframePositions($ids);
+                    if ($this->mainmodel->hasUserPosition($desctop)) {
+                        $this->mainmodel->updateIframePositions($ids,$desctop);
                     } else {
-                        $this->mainmodel->setIframePositions($ids);
+                        $this->mainmodel->setIframePositions($ids,$desctop);
                     }
                 }
             }
