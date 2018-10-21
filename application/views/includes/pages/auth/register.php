@@ -62,7 +62,7 @@
 
     <div class="row">
         <div class="col-sm-12 text-center">
-            <p>Don't have an account? <a href="<?php echo base_url(); ?>auth/register" class="text-primary m-l-5"><b>Sign Up</b></a></p>
+            <p>Don't have an account? <a href="<?php echo base_url(); ?>auth/" class="text-primary m-l-5"><b>Sign Up</b></a></p>
         </div>
     </div>
 

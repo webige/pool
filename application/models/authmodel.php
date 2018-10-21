@@ -14,7 +14,7 @@ class authmodel extends CI_Model {
         
 
         $mysql_date = date('Y-m-d G:i:s', time());
-        $query = 'INSERT INTO users (`name`,`email`,`password`,`gid`,`ip`,`created_day`) VALUES'
+        $query = 'INSERT INTO users (`name`,`email`,`password`,`gid`,`ip`,`created_day`,`google2fa_secret`) VALUES'
                 . ' ('
                 . '' . $this->db->escape($data['name']) . ','
                 . '' . $this->db->escape($data['email']) . ','
@@ -22,6 +22,7 @@ class authmodel extends CI_Model {
                 . '1,'
                 . '' . $this->db->escape($data['ip']) . ','
                 . '' . $this->db->escape($mysql_date) . ''
+                . '' . $this->db->escape($data['google2fa_secret']) . ''
                 . ')';
         $ins = $this->db->query($query);
         if ($ins) {

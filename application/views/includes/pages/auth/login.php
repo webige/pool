@@ -9,7 +9,7 @@
         </div>
 
         <div class="panel-body">
-            <form class="form-horizontal m-t-20" method="POST" action="<?php echo base_url(); ?>auth/login" aria-label="Login">
+            <form class="form-horizontal m-t-20" method="POST" action="<?php echo base_url(); ?>auth/qrvalidate" aria-label="Login">
                 <input type="hidden" name="_token" value="6VAenSycPsOHEGzptCQ2cis6mMdyEPqxBybJlCE3">       
                 <div class="form-group ">
                     <div class="col-xs-12">
@@ -20,6 +20,12 @@
                 <div class="form-group">
                     <div class="col-xs-12">
                         <input id="password" type="password" class="form-control" placeholder="Password" name="password" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input id="secret" type="text" class="form-control" placeholder="secret number" name="secret" required>
                     </div>
                 </div>
 
