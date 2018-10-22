@@ -10,28 +10,42 @@
 
         <title><?php echo $title; ?></title>
 
+        <link href="<?php echo base_url(); ?>assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        <link href="<?php echo base_url(); ?>assets/plugins/datatables/buttons.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
+        <link href="<?php echo base_url(); ?>assets/plugins/nvd3/nv.d3.min.css" rel="stylesheet" type="text/css" />
+        <!--Morris Chart CSS -->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/morris/morris.css">
+        <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-sweetalert/sweet-alert.css" rel="stylesheet" type="text/css">
+
+        <link href="<?php echo base_url(); ?>assets/plugins/datatables/buttons.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
         <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        
+        <link href="<?php echo base_url(); ?>assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" />
+        <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+
+        <link href="<?php echo base_url(); ?>assets/css/cryptofont.css" rel="stylesheet" type="text/css" />
 
         <link href="<?php echo base_url(); ?>assets/css/core.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/components.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/icons.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/pages.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/responsive.css" rel="stylesheet" type="text/css" />
-<!--        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
-<!--  <style>
-  .sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-  .sortable .item { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-  .sortable .item iframe { position: absolute; margin-left: -1.3em; }
-
-  .sortable .item:hover {
-    cursor: pointer;
-}
-
-.sortable .item{
-    cursor: move;
-}
-  </style>-->
+        <!--        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+        <!--  <style>
+          .sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+          .sortable .item { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+          .sortable .item iframe { position: absolute; margin-left: -1.3em; }
+        
+          .sortable .item:hover {
+            cursor: pointer;
+        }
+        
+        .sortable .item{
+            cursor: move;
+        }
+          </style>-->
 
 
         <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -51,6 +65,8 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+
+        <script src="<?php echo base_url(); ?>assets/plugins/counterup/jquery.counterup.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/detect.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/fastclick.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery.slimscroll.js"></script>
@@ -58,10 +74,24 @@
         <script src="<?php echo base_url(); ?>assets/js/jquery.nicescroll.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery.scrollTo.min.js"></script>
 
-      
+        <script src="<?php echo base_url(); ?>assets/plugins/counterup/jquery.counterup.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/moment.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/Chart.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/utils.js"></script>
+
+
 
         <script src="<?php echo base_url(); ?>assets/plugins/waypoints/lib/jquery.waypoints.js"></script>
 
+        <!-- DataTables -->
+        <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-table/js/bootstrap-table.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/pages/jquery.bs-table.js"></script>
+        <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-table/css/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
 
+        <link href="<?php echo base_url(); ?>assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        <link href="<?php echo base_url(); ?>assets/plugins/datatables/buttons.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-sweetalert/sweet-alert.min.js"></script>
+        <script src="<?php echo base_url(); ?>assets/pages/jquery.sweet-alert.init.js"></script>
+        <!-- END DataTables -->
     </head>
     <body>

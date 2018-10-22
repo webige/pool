@@ -34,13 +34,30 @@ class Contentwidget extends CI_Controller {
         $data['view'] = 'content-widgets';
         $data['view_pg'] = 'content-widgets';
 
-        $data['bittrex_btcusd'] = $this->getBittrexTicker();
-        $data['binance_ltcbtc'] = $this->getBinanceTicker();
-        $data['fullworkers'] = $this->getAllWorkersNumber();
-        $data['allusers'] = $this->getAllUsers();
-        $data['allhashrates'] = $this->getAllHashRates();
-        
+
         $this->load->view('index', $data);
+    }
+
+    public function getAllContentWidget() {
+      
+        if(isset($this->session->script) && !empty($this->session->script)){
+            $script = $this->session->script;
+        }
+        else{
+            $this->session->script = 'sha256';
+            $script = $this->session->script;
+        }
+        
+        $data = new stdClass();
+        $data->bittrex_btcusd = $this->getBittrexTicker();
+        $data->binance_ltcbtc = $this->getBinanceTicker();
+        $data->fullworkers = $this->getAllWorkersNumber($script);
+        $data->allusers = $this->getAllUsers();
+        $data->allhashrates = $this->getAllHashRates($script);
+        
+        echo json_encode($data);
+        die;
+        
     }
 
     public function getBittrexTicker($type = 'USD-BTC') {
@@ -56,40 +73,40 @@ class Contentwidget extends CI_Controller {
     public function getBinanceTicker($type = 'LTCBTC') {
         $ticker = file_get_contents('https://api.binance.com/api/v3/ticker/price');
         $ticker = json_decode($ticker);
-      
+
         if ($ticker) {
-            foreach($ticker as $row){
-                
-                if($row->symbol == $type){
+            foreach ($ticker as $row) {
+
+                if ($row->symbol == $type) {
                     return $row->price;
                 }
             }
         }
         return 0;
     }
-    
+
     public function getAllWorkersNumber($script = 'sha256') {
         $this->load->model('contentwidgetmodel');
         $result = $this->contentwidgetmodel->getAllWorkersNumber($script);
 
         return $result;
     }
-    
+
     public function getAllUsers() {
         $this->load->model('contentwidgetmodel');
         $result = $this->contentwidgetmodel->getAllUsers();
 
         return $result;
     }
-    
+
     public function getAllHashRates() {
         $this->load->model('contentwidgetmodel');
         $result = $this->contentwidgetmodel->getAllHashRates();
 
         return $result;
     }
-    
-    public function calculate(){
+
+    public function calculate() {
         $res['coinsPerDay'] = 0;
         $res['usdPerDay'] = 0;
         return $res;

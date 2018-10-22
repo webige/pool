@@ -8,10 +8,16 @@ class contentwidgetmodel extends CI_Model {
 
     function getAllWorkersNumber($script = 'sha256') {
 
-        $query = 'SELECT userid FROM `workers` WHERE algo = ' . $this->db->escape($script) . '';
+        //$query = 'SELECT userid FROM `workers` WHERE algo = ' . $this->db->escape($script) . '';
 
-        $res = $this->db->query($query)->result();
+        //$res = $this->db->query($query)->result();
+        
+        $res = file_get_contents(SECOND_URL.'/allworkersnumber_api.php?algo='.$script);
 
+        if($res){
+            $res = json_decode($res);
+        }
+        
         $users = array();
         if ($res) {
             foreach ($res as $row) {
@@ -30,8 +36,14 @@ class contentwidgetmodel extends CI_Model {
 
     function getAllHashRates($script = 'sha256') {
 
-        $query = 'SELECT * FROM `hashrate` WHERE algo = "' . $script . '"';
-        $all = $this->db->query($query)->row();
+        //$query = 'SELECT * FROM `hashrate` WHERE algo = "' . $script . '"';
+        //$all = $this->db->query($query)->row();
+        
+        $all = file_get_contents(SECOND_URL.'/hashrate_api.php?algo='.$script);
+
+        if($all){
+            $all = json_decode($all);
+        }
 
         $user = $this->session->userdata('user');
 
@@ -51,7 +63,7 @@ class contentwidgetmodel extends CI_Model {
 
     function getAllUsers() {
 
-        $query = 'SELECT * FROM `accounts`';
+        $query = 'SELECT * FROM `users`';
         return $this->db->query($query)->num_rows();
     }
 

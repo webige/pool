@@ -5,15 +5,15 @@
         <div class="container">
             <?php
             if ($iframes) {
-                ?>
-
-                <?php
+             
                 for ($i = 1; $i <= count($iframes); $i++) {
                     if (isset($iframes[$i])) {
                         ?>
                         <div class="item" id="<?php echo $i; ?>">
-                            Move from here
-                            <iframe src="<?php echo base_url() . $iframes[$i] ?>/" style="border:none; width: 100%;" frameborder="0" scrolling="no" onload="resizeIframe(this, <?php echo $iframes[$i] == 'hashratemonitor' ? 420 : 0; ?>)"></iframe>
+                            <span style="cursor: pointer" onclick="deleteIframe(<?php echo $i; ?>);" >X (CLOSE)</span>
+                            <?php
+                            include('includes/'.$iframes[$i].'.php');
+                            ?>
 
                         </div>
                         <?php
@@ -66,6 +66,10 @@
 
             })
         });
+        
+        function deleteIframe(id){
+        
+        }
 
 
 

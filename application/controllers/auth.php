@@ -128,16 +128,30 @@ class auth extends CI_Controller {
             return false;
         }
 
-        $query = ' SELECT u.*, a.id AS user_id, a.coinid, a.last_earning, a.balance FROM users  AS u '
+        $query111 = ' SELECT u.*, a.id AS user_id, a.coinid, a.last_earning, a.balance FROM users  AS u '
                 . ' LEFT JOIN `accounts` AS a ON a.username = u.name '
                 . ' WHERE email = ' . $this->db->escape($post['email']) . ' AND password = ' . $this->db->escape(md5($post['password'])) . ' ';
+        $query = ' SELECT * FROM users '
+                . ' WHERE email = ' . $this->db->escape($post['email']) . ' AND password = ' . $this->db->escape(md5($post['password'])) . ' ';
+
+
         $cntname = $this->db->query($query)->row();
+
 
         if (!$cntname) {
             $this->session->set_flashdata('err_msg', 'Email or password do not match');
             redirect(base_url() . 'auth/register');
             return false;
         } else {
+            $data = file_get_contents(SECOND_URL.'/login_api.php?usrnm='. $cntname->name);
+            if ($data) {
+                $ddt = json_decode($data);
+                $cntname->user_id = $ddt->user_id;
+                $cntname->coinid = $ddt->coinid;
+                $cntname->last_earning = $ddt->last_earning;
+                $cntname->balance = $ddt->balance;
+            }
+         
             $this->session->set_userdata('user', $cntname);
             redirect(base_url() . 'index.php');
             return false;

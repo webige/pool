@@ -37,6 +37,16 @@ class mainmodel extends CI_Model {
         }
         return $iframe;
     }
+    
+    public function getGroups() {
+        $user = $this->session->userdata('user');
+
+        $query = 'SELECT a.*, b.id AS user_id FROM `users` AS a '
+                . ' LEFT JOIN `accounts` AS b ON b.username = a.name '
+                . ' WHERE a.parent_id = '.$user->id;
+        $all = $this->db->query($query)->result();
+        return $all;
+    }
 
     public function updateIframePositions($data = array(),$d = 1) {
         if ($data) {

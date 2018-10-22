@@ -6,7 +6,7 @@ class headerwidgetmodel extends CI_Model {
         parent::__construct();
     }
 
-    function getActiveWorkers() {
+    function getActiveWorkers($script = 'sha256') {
 
         $user = $this->session->userdata('user');
  
@@ -15,8 +15,15 @@ class headerwidgetmodel extends CI_Model {
         }
 
         $query = 'SELECT * FROM `workers` WHERE userid = ' . $user->user_id;
+        
+        $res = file_get_contents(SECOND_URL.'/allworkersnumber_api.php?algo='.$script);
+
+        if($res){
+            $res = json_decode($res);
+            return count($res);
+        }
       
-        return $this->db->query($query)->num_rows();
+        return 0;
     }
 
 }

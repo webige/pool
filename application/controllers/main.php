@@ -21,23 +21,23 @@ class main extends CI_Controller {
      */
     public function index() {
         $user = $this->session->userdata('user');
-        
+
 
         if (!isset($user) || empty($user)) {
             redirect(base_url() . 'auth');
             return false;
         }
-        
-                $this->load->helper('userdesctop');
-        
+
+        $this->load->helper('userdesctop');
+
         $usd = getDesctop($user->id);
-        if ($this->input->get('d')){
-            $d_arr = array(1,2,3);
+        if ($this->input->get('d')) {
+            $d_arr = array(1, 2, 3);
             $desctop = $this->input->get('d');
-            if (!in_array($desctop,$d_arr)){
+            if (!in_array($desctop, $d_arr)) {
                 $desctop = 1;
             }
-        }else{
+        } else {
             $desctop = $usd->desctop;
         }
 
@@ -49,16 +49,36 @@ class main extends CI_Controller {
         $data['view_pg'] = 'dashboard';
         $data['user'] = $user;
         $data['usd'] = $usd;
+
+        $data['groups'] = array();
+
+        if ($user->gid <= 2) {
+            $data['groups'] = $this->getGroups();
+        }
+
         $this->load->view('index', $data);
+    }
+
+    public function getGroups() {
+        $user = $this->session->userdata('user');
+        ;
+
+        if (!isset($user) || empty($user)) {
+            return array();
+        }
+        $this->load->model('mainmodel');
+        $result = $this->mainmodel->getGroups();
+
+        return $result;
     }
 
     public function iframes_json() {
         $this->load->model('mainmodel');
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
-            $d_arr = array(1,2,3);
+            $d_arr = array(1, 2, 3);
             $json_ids = $this->input->post('ids');
             $desctop = $this->input->post('desctop');
-            if (!in_array($desctop,$d_arr)){
+            if (!in_array($desctop, $d_arr)) {
                 $desctop = 1;
             }
             if ($json_ids) {
@@ -66,9 +86,9 @@ class main extends CI_Controller {
                 $ids = $json_ids;
                 if (is_array($ids)) {
                     if ($this->mainmodel->hasUserPosition($desctop)) {
-                        $this->mainmodel->updateIframePositions($ids,$desctop);
+                        $this->mainmodel->updateIframePositions($ids, $desctop);
                     } else {
-                        $this->mainmodel->setIframePositions($ids,$desctop);
+                        $this->mainmodel->setIframePositions($ids, $desctop);
                     }
                 }
             }

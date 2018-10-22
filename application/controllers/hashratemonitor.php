@@ -50,10 +50,107 @@ class Hashratemonitor extends CI_Controller {
         if (!isset($user) || empty($user)) {
             die;
         }
+        if (isset($this->session->script) && !empty($this->session->script)) {
+            $script = $this->session->script;
+        } else {
+            $this->session->script = 'sha256';
+            $script = $this->session->script;
+        }
         $this->load->model('hashratemonitormodel');
-        $result = $this->hashratemonitormodel->getHasRates();
+        $result = $this->hashratemonitormodel->getHasRates($script);
 
         echo json_encode($result);
+        die;
+    }
+
+    public function getHasRatesFromYiimp7day() {
+        $user = $this->session->userdata('user');
+        ;
+
+        if (!isset($user) || empty($user)) {
+            die;
+        }
+
+        $data = file_get_contents(SECOND_URL . '/hashuser_api.php');
+
+
+        if ($data) {
+            $data = json_decode($data);
+
+            foreach ($data as $row) {
+                $query = 'INSERT INTO hashuser7d (userid, time, hashrate, hashrate_bad, algo) '
+                        . 'VALUES (' . $this->db->escape($row['userid']) . ','
+                        . '' . $this->db->escape($row['time']) . ', '
+                        . '' . $this->db->escape($row['hashrate']) . ', '
+                        . '' . $this->db->escape($row['hashrate_bad']) . ', '
+                        . '' . $this->db->escape($row['algo']) . ' '
+                        . ')';
+                $this->db->query($query);
+            }
+        }
+
+
+        echo 'good';
+        die;
+    }
+
+    public function getHasRatesFromYiimp30day() {
+        $user = $this->session->userdata('user');
+        ;
+
+        if (!isset($user) || empty($user)) {
+            die;
+        }
+        $data = file_get_contents(SECOND_URL . '/hashuser_api.php');
+
+
+        if ($data) {
+            $data = json_decode($data);
+
+            foreach ($data as $row) {
+                $query = 'INSERT INTO hashuser30d (userid, time, hashrate, hashrate_bad, algo) '
+                        . 'VALUES (' . $this->db->escape($row['userid']) . ','
+                        . '' . $this->db->escape($row['time']) . ', '
+                        . '' . $this->db->escape($row['hashrate']) . ', '
+                        . '' . $this->db->escape($row['hashrate_bad']) . ', '
+                        . '' . $this->db->escape($row['algo']) . ' '
+                        . ')';
+                $this->db->query($query);
+            }
+        }
+
+
+        echo 'good';
+        die;
+    }
+
+    public function getHasRatesFromYiimp90day() {
+        $user = $this->session->userdata('user');
+        ;
+
+        if (!isset($user) || empty($user)) {
+            die;
+        }
+        $data = file_get_contents(SECOND_URL . '/hashuser_api.php');
+
+
+        if ($data) {
+            $data = json_decode($data);
+
+            foreach ($data as $row) {
+                $query = 'INSERT INTO hashuser90d (userid, time, hashrate, hashrate_bad, algo) '
+                        . 'VALUES (' . $this->db->escape($row['userid']) . ','
+                        . '' . $this->db->escape($row['time']) . ', '
+                        . '' . $this->db->escape($row['hashrate']) . ', '
+                        . '' . $this->db->escape($row['hashrate_bad']) . ', '
+                        . '' . $this->db->escape($row['algo']) . ' '
+                        . ')';
+                $this->db->query($query);
+            }
+        }
+
+
+        echo 'good';
         die;
     }
 
@@ -80,6 +177,10 @@ class Hashratemonitor extends CI_Controller {
         if (!$id) {
             die;
         }
+        $name = $_POST['name'];
+        if (!$name) {
+            die;
+        }
 
         $target = $this->yaamp_hashrate_constant();
         $interval = $this->yaamp_hashrate_step();
@@ -88,11 +189,24 @@ class Hashratemonitor extends CI_Controller {
         $interval1 = 60 * 60 * 24;
         $delay1 = time() - $interval1;
 
+        $data = file_get_contents(SECOND_URL . '/userworkers_api.php?usrnm=' . $name);
 
-        $query = 'SELECT a.*, s.started FROM `workers` AS a '
-                . ' LEFT JOIN `stratums` AS s ON a.pid = s.pid'
-                . ' WHERE userid = ' . $id . ' ORDER BY worker DESC';
-        $all = $this->db->query($query)->result();
+        if ($data) {
+            $ddt = json_decode($data);
+            $all = $ddt;
+        } else {
+            $ttest = array();
+            $ttest[0] = new stdclass();
+            $ttest[0]->worker = '';
+            $ttest[0]->id = '';
+            $ttest[0]->time = '';
+            $ttest[0]->miners = '';
+            $ttest[0]->name = '';
+            $ttest[0]->status = '';
+            $ttest[0]->checkbox = '';
+            echo json_encode($ttest);
+            die;
+        }
 
         $worker = 'empty';
 
@@ -128,7 +242,7 @@ class Hashratemonitor extends CI_Controller {
                     $alln[$i]->status = '<div class="label label-table label-success"> Active</div>';
                     $alln[$i]->checkbox = '<div class="label label-table "> <input type="checkbox" class="group_radio_val"  name="group" value="' . $row->name . '"></div>';
                 } else {
-                    $alln[$i]->id = $alln[$i]->id . ', ' . $row->id;
+                    $alln[$i]->id = $alln[$i]->id . '_' . $row->id;
                     $alln[$i]->miners = $i + 1;
                 }
             }
@@ -140,20 +254,21 @@ class Hashratemonitor extends CI_Controller {
 
 
         foreach ($alln as $key => $row) {
-            $query = "SELECT (sum(difficulty) * $target / $interval / 1000) AS total FROM shares WHERE valid AND time>$delay AND workerid IN (" . $row->id . ")";
-            $hsrat = $this->db->query($query)->row();
+            //$query = "SELECT (sum(difficulty) * $target / $interval / 1000) AS total FROM shares WHERE valid AND time>$delay AND workerid IN (" . $row->id . ")";
+            //$hsrat = $this->db->query($query)->row();
 
-            $alln[$key]->hashrate = $hsrat->total ? $this->Itoa2($hsrat->total) . 'h/s' : '';
 
-            $query = "SELECT (sum(difficulty) * $target / $interval1 / 1000) AS total FROM shares WHERE valid AND time>$delay1 AND workerid IN (" . $row->id . ")";
-            $hsrat24 = $this->db->query($query)->row();
+            $data = file_get_contents(SECOND_URL . '/hashstat_api.php?id=' . $row->id . '&target=' . $target . '&interval=' . $interval . '&delay=' . $delay . '&interval1=' . $interval1 . '&delay1=' . $delay1);
 
-            $alln[$key]->hashrate24 = $hsrat24->total ? $this->Itoa2($hsrat24->total) . 'h/s' : '';
+            if ($data) {
+                $data = json_decode($data);
 
-            $query = "SELECT (sum(difficulty) * $target / $interval1 / 1000) AS total FROM shares WHERE valid AND workerid IN (" . $row->id . ")";
-            $hsrat24 = $this->db->query($query)->row();
+                $alln[$key]->hashrate = $data->hsrat->total ? $this->Itoa2($data->hsrat->total) . 'h/s' : '';
 
-            $alln[$key]->hashrateavg = $hsrat24->total ? $this->Itoa2($hsrat24->total) . 'h/s' : '';
+                $alln[$key]->hashrate24 = $data->hsrat24->total ? $this->Itoa2($data->hsrat24->total) . 'h/s' : '';
+
+                $alln[$key]->hashrateavg = $data->hsratavg->total ? $this->Itoa2($data->hsratavg->total) . 'h/s' : '';
+            }
         }
 
         echo json_encode($alln);
@@ -213,7 +328,7 @@ class Hashratemonitor extends CI_Controller {
 
                         $query = 'SELECT * FROM users WHERE name = ' . $this->db->escape($name) . ' OR email = ' . $this->db->escape($email) . '';
                         $cn = $this->db->query($query)->num_rows();
-                        
+
                         if ($cn > 0) {
                             $msg = array('ok' => 2);
                         } else {
