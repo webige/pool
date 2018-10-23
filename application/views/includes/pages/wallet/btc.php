@@ -2,6 +2,10 @@
     <!-- Start content -->
     <div class="content">
         <div class="container">
+            <?php
+            $user = $this->session->userdata('user');
+         
+            ?>
             <script type="text/javascript">
                 function addWallet() {
                     var val = $('#example-input1-group1').val();
@@ -26,6 +30,39 @@
 
 
                 }
+
+                $(document).ready(function () {
+                    $('#transfer_button').click(function () {
+                        var wallet = $('#main_wallet').val();
+                        var amount = parseInt($('#amount').val());
+                        var password = $('#password').val();
+
+                        if (wallet == '' || wallet == ' ') {
+                            alert('wallet is empty');
+                            return false;
+                        }
+                        if (amount == '' || amount == ' ' || amount == 0) {
+                            alert('amount is empty');
+                            return false;
+                        }
+                        if (password == '' || password == ' ') {
+                            alert('password is empty');
+                            return false;
+                        }
+
+                        var userAmount = '<?php echo $user->balance; ?>';
+
+                        console.log(userAmount);
+                        if (amount < userAmount) {
+                            alert('balance not enough');
+                            //return false;
+                        }
+
+                        $('#transfer_form').submit();
+
+                    });
+                });
+
             </script>
             <div class="row">
                 <div class="col-md-12">
@@ -41,7 +78,7 @@
                         </div>
 
                         <div class="p-20">
-                            <form method="POST">
+                            <form action="<?php echo base_url() ?>wallet/transfer" id="transfer_form" method="POST">
 
 
                                 <input type="hidden" name="currency" value="BTC">
@@ -57,7 +94,7 @@
                                                 $value = $wallet->wallet;
                                             }
                                             ?>
-                                            <input type="text" class="form-control" id="main_wallet" placeholder="xxxxxxx" disabled="disabled" name="address" data-ignore="true" value="<?php echo $value; ?>">
+                                            <input type="text" class="form-control" id="main_wallet" placeholder="xxxxxxx" disabled="disabled" name="main_wallet" data-ignore="true" value="<?php echo $value; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -66,27 +103,21 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="field-3" class="control-label">Transfer</label>
-                                            <input type="password" class="form-control " value="" name="password" data-ignore="true">
+                                            <input type="text" class="form-control " value="" name="amount" id="amount" data-ignore="true">
                                         </div>
                                     </div>
 
-                                    <div class="col-md-1">
-                                        <div class="form-group">
-                                            <label for="field-3" class="control-label">Transfer</label>
-                                            <p>BTC To Wallet</p>
-                                        </div>
-                                    </div>
 
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <label for="field-3" class="control-label">BTC</label>
+                                            <label for="field-3" class="control-label">Password</label>
                                             <input type="password" class="form-control " id="main_wallet_editable" value="<?php echo $value; ?>" name="password" data-ignore="true">
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <button type="button" class="btn btn-info waves-effect waves-light">Save changes</button>
+                                <button type="button" id="transfer_button" class="btn btn-info waves-effect waves-light">Transfer</button>
                             </form>
                         </div>
                     </div>
