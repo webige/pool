@@ -5,16 +5,18 @@
         <div class="container">
             <?php
             if ($iframes) {
-             
-                for ($i = 1; $i <= count($iframes); $i++) {
-                    if (isset($iframes[$i])) {
-                        ?>
-                        <div class="item" id="<?php echo $i; ?>">
-                            <span style="cursor: pointer" onclick="deleteIframe(<?php echo $i; ?>);" >X (CLOSE)</span>
-                            <?php
-                            include('includes/'.$iframes[$i].'.php');
-                            ?>
 
+                for ($i = 1; $i <= count($iframes); $i++) {
+                    if (isset($iframes[$i]->name)) {
+                        ?>
+                        <div class="item" id="<?php echo $i; ?>" <?php echo $iframes[$i]->status < 1 ? 'style="display:none"' : ''; ?>>
+                            <div class="handle" style="cursor: move">Move from here</div>
+                            <span style="cursor: pointer" onclick="deleteIframe('<?php echo $iframes[$i]->name; ?>',<?php echo $i; ?>);" >X (CLOSE)</span>
+                            <div class="inner-content">
+                                <?php
+                                include('includes/' . $iframes[$i]->name . '.php');
+                                ?>
+                            </div>
                         </div>
                         <?php
                     }
@@ -45,7 +47,7 @@
                     var ifrms = <?php echo json_encode($iframes); ?>
 
                     $.each(elm, function (i, val) {
-                        ids[i] = ifrms[val.id]
+                        ids[i] = ifrms[val.id].name
 
                     });
                     console.log(ids)
@@ -62,15 +64,31 @@
                             },
                         })
                     }
-                }
+                },
+                handle: ".handle"
 
             })
         });
-        
-        function deleteIframe(id){
-        
-        }
 
+        function deleteIframe(fid, id) {
+            if (fid) {
+                $.ajax({
+                    method: "POST",
+                    url: '<?php echo base_url(); ?>main/iframes_json',
+                    data: {fid: fid, desctop: $("#desctop").val(), type: 'del'},
+                    dataType: "text",
+                    error: function (request, error) {
+                        console.log(arguments);
+                        alert(" Can't do because: " + error);
+                    },
+                    success: function (json) {
+                        
+                        $('#' + id).hide();
+                    }
+                })
+                
+            }
+        }
 
 
     </script>
