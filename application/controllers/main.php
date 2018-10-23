@@ -86,6 +86,15 @@ class main extends CI_Controller {
             if ($this->input->post('type') == 'del') {
                 $name = $this->input->post('fid');
                 $this->mainmodel->deleteIframePosition($name, $desctop);
+            } elseif ($this->input->post('type') == 'open') {
+                $name = $this->input->post('fid');
+                $this->mainmodel->openIframePosition($name, $desctop);
+                $json = $this->mainmodel->getIframeByName($name, $desctop);
+
+                
+
+        echo json_encode($json);
+      
             } else {
                 $json_ids = $this->input->post('ids');
                 if ($json_ids) {

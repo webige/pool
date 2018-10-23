@@ -22,10 +22,16 @@
                     <a href="<?php echo base_url(); ?>?d=3" class="waves-effect <?php echo (!$this->input->get('d') && $usd->desctop == 3) ? 'active':''; ?>"><i class="ti-home"></i> <span> Dashboard 3</span> </a>
                 </li>
                 <li >
-                    <a href="#" class="waves-effect"><i class="fa fa-pie-chart"></i> <span> FINANCE </span> </a>
+                    <a href="javascript:void(0);" onclick="openIframe('headerwidget');" class="waves-effect"><i class="fa fa-pie-chart"></i> <span> HEADER WIDGET </span> </a>
+                </li>
+                <li >
+                    <a href="javascript:void(0);" onclick="openIframe('contentwidget');" class="waves-effect"><i class="fa fa-pie-chart"></i> <span> CONTENT WIDGET </span> </a>
+                </li>
+                <li >
+                    <a href="javascript:void(0);" onclick="openIframe('finance');" class="waves-effect"><i class="fa fa-pie-chart"></i> <span> FINANCE </span> </a>
                 </li>
                 <li>
-                    <a href="#" class="waves-effect "><i class="fa fa-area-chart"></i> <span> HASHRATE MONITOR </span> </a>
+                    <a href="javascript:void(0);" onclick="openIframe('hashratemonitor');" class="waves-effect "><i class="fa fa-area-chart"></i> <span> HASHRATE MONITOR </span> </a>
                 </li>
                 <li class="has_sub">
                     <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-google-wallet"></i> <span> WALLETS </span>  <span class="menu-arrow"></span> </a>

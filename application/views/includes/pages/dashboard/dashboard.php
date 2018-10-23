@@ -92,6 +92,28 @@
 
 
     </script>
+    <script>
+function openIframe(fid){
+    
+    if (fid) {
+                $.ajax({
+                    method: "POST",
+                    url: '<?php echo base_url(); ?>main/iframes_json',
+                    data: {fid: fid, desctop: $("#desctop").val(), type: 'open'},
+                    dataType: "json",
+                    error: function (request, error) {
+                        console.log(arguments);
+                        alert(" Can't do because: " + error);
+                    },
+                    success: function (json) {
+                        console.log(json["order"])
+                        $('#' + json.order).show();
+                    }
+                })
+                
+            }
+}
+</script>
     <footer class="footer text-right">
         © 2018-19. All rights reserved.
     </footer>

@@ -135,4 +135,39 @@ class mainmodel extends CI_Model {
         $db->query($query);
     }
 
+    public function openIframePosition($name, $d = 1) {
+        $user = $this->session->userdata('user');
+        if (!$user->id) {
+            return false;
+        }
+        $db = $this->db;
+        $query = 'UPDATE `iframe_position_users` SET `status` = 1 WHERE `d` = ' . $d . ' AND `position_name` = ' . $this->db->escape($name) . ' AND user_id = ' . $user->id . ' LIMIT 1';
+        $db->query($query);
+    }
+
+    public function getIframeByName($name, $d = 1) {
+        $user = $this->session->userdata('user');
+
+        if (!$user->id) {
+            return 0;
+        }
+        $db = $this->db;
+
+        $query = 'SELECT iu.*,i.name FROM '
+                . '`iframe_position_users` as iu '
+                . 'LEFT JOIN `iframe_position` as i on i.name = iu.position_name '
+                . 'WHERE iu.user_id = ' . $user->id . ' AND iu.d = ' . $d . ' AND iu.position_name = ' . $this->db->escape($name) . ' ORDER BY `iu`.`order` DESC';
+        $res = $db->query($query)->row();
+        $arr = array();
+        $arr['order'] = '';
+        $arr['name'] = '';
+        $arr['id'] = '';
+        if ($res) {
+            $arr['order'] = $res->order;
+            $arr['name'] = $res->name;
+            $arr['id'] = $res->id;
+        }
+        return $arr;
+    }
+
 }
