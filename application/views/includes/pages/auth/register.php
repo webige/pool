@@ -1,4 +1,3 @@
-<div class="account-pages"></div>
 <div class="clearfix"></div>
 <div class="wrapper-page">
     <div class=" card-box">
@@ -66,4 +65,3 @@
         </div>
     </div>
 
-</div>

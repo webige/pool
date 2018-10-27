@@ -16,7 +16,7 @@ class headerwidgetmodel extends CI_Model {
 
         $query = 'SELECT * FROM `workers` WHERE userid = ' . $user->user_id;
         
-        $res = file_get_contents(SECOND_URL.'/allworkersnumber_api.php?algo='.$script);
+        $res = file_get_contents(SECOND_URL.'Cronjob/allworkersnumber?algo='.$script);
 
         if($res){
             $res = json_decode($res);

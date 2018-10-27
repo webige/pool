@@ -143,7 +143,7 @@ class auth extends CI_Controller {
             redirect(base_url() . 'auth/register');
             return false;
         } else {
-            $data = file_get_contents(SECOND_URL.'/login_api.php?usrnm='. $cntname->name);
+            $data = file_get_contents(SECOND_URL.'/Cronjob/login?usrnm='. $cntname->name);
             if ($data) {
                 $ddt = json_decode($data);
                 $cntname->user_id = $ddt->user_id;

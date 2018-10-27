@@ -71,7 +71,7 @@ class Hashratemonitor extends CI_Controller {
             die;
         }
 
-        $data = file_get_contents(SECOND_URL . '/hashuser_api.php');
+        $data = file_get_contents(SECOND_URL . 'Cronjob/hashuser');
 
 
         if ($data) {
@@ -101,7 +101,7 @@ class Hashratemonitor extends CI_Controller {
         if (!isset($user) || empty($user)) {
             die;
         }
-        $data = file_get_contents(SECOND_URL . '/hashuser_api.php');
+        $data = file_get_contents(SECOND_URL . 'Cronjob/hashuser');
 
 
         if ($data) {
@@ -131,7 +131,7 @@ class Hashratemonitor extends CI_Controller {
         if (!isset($user) || empty($user)) {
             die;
         }
-        $data = file_get_contents(SECOND_URL . '/hashuser_api.php');
+        $data = file_get_contents(SECOND_URL . 'Cronjob/hashuser');
 
 
         if ($data) {
@@ -189,7 +189,7 @@ class Hashratemonitor extends CI_Controller {
         $interval1 = 60 * 60 * 24;
         $delay1 = time() - $interval1;
 
-        $data = file_get_contents(SECOND_URL . '/userworkers_api.php?usrnm=' . $name);
+        $data = file_get_contents(SECOND_URL . 'Cronjob/userworkers?usrnm=' . $name);
 
         if ($data) {
             $ddt = json_decode($data);
@@ -258,7 +258,7 @@ class Hashratemonitor extends CI_Controller {
             //$hsrat = $this->db->query($query)->row();
 
 
-            $data = file_get_contents(SECOND_URL . '/hashstat_api.php?id=' . $row->id . '&target=' . $target . '&interval=' . $interval . '&delay=' . $delay . '&interval1=' . $interval1 . '&delay1=' . $delay1);
+            $data = file_get_contents(SECOND_URL . 'Cronjob/hashstat?id=' . $row->id . '&target=' . $target . '&interval=' . $interval . '&delay=' . $delay . '&interval1=' . $interval1 . '&delay1=' . $delay1);
 
             if ($data) {
                 $data = json_decode($data);

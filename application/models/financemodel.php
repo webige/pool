@@ -9,8 +9,9 @@ class financemodel extends CI_Model {
 
         $db = $this->db;
         $user = $this->session->userdata('user');
-        $query = 'SELECT w.* FROM withdraws as w '
-                . 'WHERE w.user_id = '.$user->user_id.' ORDER BY w.id DESC';
+        
+        $query = 'SELECT * FROM withdraws  '
+                . 'WHERE user_id = '.$user->user_id.' ORDER BY id DESC';
 
         return $db->query($query)->result();
     }

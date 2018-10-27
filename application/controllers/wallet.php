@@ -108,7 +108,11 @@ class wallet extends CI_Controller {
     public function transfer() {
         $user = $this->session->userdata('user');
         ;
-      
+echo '<pre>';
+print_r(SECOND_URL . '/Cronjob/Payment?coin=' . $_POST['currency'] . '&wallet='.$_POST['main_wallet'].'&balance='.$_POST['amount'].'&user_id=10');
+echo '</pre>';
+die;
+
         if (!isset($user) || empty($user)) {
 
             $this->session->set_flashdata('err_msg', 'You are not logged in');
@@ -152,7 +156,7 @@ class wallet extends CI_Controller {
         $main_wallet = $_POST['main_wallet'];
         $amount = $_POST['amount'];
 
-        $coin = file_get_contents(SECOND_URL . '/coin_api.php?coin=' . $_POST['currency']);
+        $coin = file_get_contents(SECOND_URL . '/Cronjob/coin?coin=' . $_POST['currency']);
         if ($coin) {
             $coin = json_decode($coin);
         } else {
@@ -167,38 +171,78 @@ class wallet extends CI_Controller {
             return false;
         }
 
-        if ($user->balance < $coin->payout_min) {
+        if ($amount < $coin->payout_min) {
             $this->session->set_flashdata('err_msg', 'Balance is too small');
             redirect(base_url());
             return false;
         }
 
-        if ($user->balance > $coin->payout_max) {
+        if ($amount > $coin->payout_max) {
             $this->session->set_flashdata('err_msg', 'Balance is too big');
             redirect(base_url());
             return false;
         }
 
+echo '<pre>';
+print_r($user);
+echo '</pre>';
+die;
 
         $query = 'INSERT INTO withdraws '
                 . '(currency, user_id, wallet, amount, status, time_start, time_end) VALUES '
                 . '(' . $this->db->escape($_POST['currency']) . ', ' . $this->db->escape($user->id) . ', ' . $this->db->escape($main_wallet) . ', ' . $this->db->escape($amount) . ''
                 . ', 1, ' . $this->db->escape(time()) . ', 0)';
-        
-        if($this->db->query($query)){
+
+        if ($this->db->query($query)) {
             $insert_id = $this->db->insert_id();
-        }
-        else{
+        } else {
             $this->session->set_flashdata('err_msg', 'Error could not start withdrawal');
             redirect(base_url());
             return false;
         }
+echo '<pre>';
+print_r();
+echo '</pre>';
+die;
 
-        die;
+        $data = file_get_contents(SECOND_URL . '/Cronjob/Payment?coin=' . $cntname->name . '&wallet='.$main_wallet.'&balance='.$amount.'&user_id');
 
-        if (!$name || !$type) {
-            die;
+        $MSGarray = array(
+            100 => 'IP is not valid',
+            101 => 'Coin is empty',
+            102 => 'Wallet is empty',
+            103 => 'Balance is empty',
+            104 => 'User is empty',
+            105 => 'Payment frequency is under limit',
+            106 => 'payment: can`t connect to ' . $coin . ' wallet',
+            107 => 'payment: can1t get user',
+            108 => 'balance is not enough',
+            109 => 'balance is not bigger than min payment',
+            110 => 'other coin',
+            111 => 'nothing to pay',
+            112 => 'still not possible, skip payment',
+            113 => 'Payment could not respond',
+            1 => 'Payment is ok'
+        );
+
+        if ($data == 1) {
+            $query = 'UPDATE withdraws SET status = 2, time_end = ' . $this->db->escape(time()) . ', status_msg = "Payment is OK"';
+            $msg = $MSGarray[$data];
+            //$this->session->set_userdata('name', $fullname);      
+        } else {
+            if (isset($MSGarray[$data]) && !empty($MSGarray[$data])) {
+                $query = 'UPDATE withdraws SET status = ' . $data . ', time_end = ' . $this->db->escape(time()) . ', status_msg = "' . $MSGarray[$data] . '"';
+                $msg = $MSGarray[$data];
+            } else {
+                $query = 'UPDATE withdraws SET status = ' . $data . ', time_end = ' . $this->db->escape(time()) . ', status_msg = "Server error (did not return anything) !!!"';
+                $msg = "Server error (did not return anything) !!!";
+            }
         }
+
+        $this->db->query($query);
+        $this->session->set_flashdata('err_msg', $msg);
+        redirect(base_url());
+        return false;
     }
 
 }

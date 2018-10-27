@@ -32,6 +32,7 @@
         <link href="<?php echo base_url(); ?>assets/css/icons.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/pages.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>assets/css/responsive.css" rel="stylesheet" type="text/css" />
+        
         <!--        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
         <!--  <style>
           .sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
@@ -92,6 +93,7 @@
         <link href="<?php echo base_url(); ?>assets/plugins/datatables/buttons.bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-sweetalert/sweet-alert.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/pages/jquery.sweet-alert.init.js"></script>
+        <script src="<?php echo base_url(); ?>assets/js/core.js"></script>
         <!-- END DataTables -->
     </head>
     <body>

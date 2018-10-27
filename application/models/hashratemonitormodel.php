@@ -70,7 +70,7 @@ class hashratemonitormodel extends CI_Model {
         if($all){
             $exparr = array();
             foreach($all as $row){
-                $exparr[] = $row['id'];
+                $exparr[] = $row->id;
             }
         }
         

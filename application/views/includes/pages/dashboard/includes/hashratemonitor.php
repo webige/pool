@@ -185,6 +185,7 @@
                 }
                 //console.log($(this).prop("checked"));
             });
+            
             if (val) {
                 var k = '<?php echo base_url(); ?>Hashratemonitor/getGroup';
                 $.ajax({
@@ -207,6 +208,7 @@
                 $('#filed_email').val('');
                 $('#filed_id').val('');
             }
+           
             $('.popupForm').click();
             return false;
         }

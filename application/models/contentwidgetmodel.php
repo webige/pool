@@ -12,7 +12,7 @@ class contentwidgetmodel extends CI_Model {
 
         //$res = $this->db->query($query)->result();
         
-        $res = file_get_contents(SECOND_URL.'/allworkersnumber_api.php?algo='.$script);
+        $res = file_get_contents(SECOND_URL.'Cronjob/allworkersnumber?algo='.$script);
 
         if($res){
             $res = json_decode($res);
@@ -39,7 +39,7 @@ class contentwidgetmodel extends CI_Model {
         //$query = 'SELECT * FROM `hashrate` WHERE algo = "' . $script . '"';
         //$all = $this->db->query($query)->row();
         
-        $all = file_get_contents(SECOND_URL.'/hashrate_api.php?algo='.$script);
+        $all = file_get_contents(SECOND_URL.'Cronjob/hashrate?algo='.$script);
 
         if($all){
             $all = json_decode($all);
