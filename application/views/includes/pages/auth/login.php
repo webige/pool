@@ -23,6 +23,12 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input id="secret" type="text" class="form-control" placeholder="secret number" name="secret" required>
+                    </div>
+                </div>
+
                 <div class="form-group ">
                     <div class="col-xs-12">
                         <div class="checkbox checkbox-primary">
