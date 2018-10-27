@@ -1,4 +1,7 @@
-
+<?php
+$this->load->helper('alertMSG');
+echo getAlertMSG();
+?> 
 <div class="account-pages"></div>
 <div class="clearfix"></div>
 <div class="wrapper-page">
@@ -8,29 +11,27 @@
         </div>
 
         <div class="panel-body">
-           
-                                <div class="form-group ">
-                    <div class="col-xs-12">
-                        <img src="<?php echo $qrurl; ?>" alt="">
-                    </div>
-                                </div>
-                <div class="form-group ">
-                    <div class="col-xs-12">
-                        <input id="secret" type="text" class="form-control" name="secret" value="" placeholder="Secret Number" required autofocus>
-                    </div>
+
+            <div class="form-group ">
+                <div class="col-xs-12">
+                    <img src="<?php echo $qrurl; ?>" alt="">
                 </div>
-
-
-                <div class="form-group text-center m-t-40">
-                    <div class="col-xs-12">
-                        <a href="<?php echo base_url().'/auth'; ?>" class="btn btn-pink btn-block text-uppercase waves-effect waves-light" type="submit">Validate</button>
-                    </div>
+            </div>
+            <!--
+            <div class="form-group ">
+                <div class="col-xs-12">
+                    <input id="secret" type="text" class="form-control" name="secret" value="" placeholder="Secret Number" required autofocus>
                 </div>
+            </div>
+-->
 
-
-       
-
-
+            <div class="form-group text-center m-t-40">
+                <div class="col-xs-12">
+                    <a href="<?php echo base_url() . '/auth'; ?>">
+                        <button class="btn btn-pink btn-block text-uppercase waves-effect waves-light" type="submit">Validate</button>
+                    </a>
+                </div>
+            </div>
 
 
         </div>

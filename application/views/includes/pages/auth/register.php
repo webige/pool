@@ -1,3 +1,7 @@
+<?php
+$this->load->helper('alertMSG');
+echo getAlertMSG();
+?> 
 <div class="clearfix"></div>
 <div class="wrapper-page">
     <div class=" card-box">

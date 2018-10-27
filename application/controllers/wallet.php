@@ -119,6 +119,24 @@ die;
             redirect(base_url());
             return false;
         }
+        
+        if (!isset($_POST['secret']) || empty($_POST['secret'])) {
+
+            $this->session->set_flashdata('err_msg', 'Google 2fs secret key not found');
+            redirect(base_url());
+            return false;
+        }
+        
+        $google2fa = new PragmaRX\Google2FA\Google2FA;
+
+        $valid = $google2fa->verifyKey($user->google2fa_secret, $_POST['secret'], 8);
+        
+        if (!$valid) {
+
+            $this->session->set_flashdata('err_msg', 'Google 2fs secret key not valid');
+            redirect(base_url());
+            return false;
+        }
 
         if (!isset($_POST['main_wallet']) || empty($_POST['main_wallet'])) {
 

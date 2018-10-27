@@ -2,7 +2,10 @@
 <div class="content">
     <div class="container">
 
-
+<?php
+$this->load->helper('alertMSG');
+echo getAlertMSG();
+?> 
 
         <div class="row">
             <div class="col-sm-12">

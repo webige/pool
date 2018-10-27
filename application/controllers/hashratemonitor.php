@@ -296,7 +296,7 @@ class Hashratemonitor extends CI_Controller {
     public function saveGroupChanges() {
         $user = $this->session->userdata('user');
         $msg = array('ok' => 0);
-        if (!isset($user) || empty($user) || $user->gid > 2) {
+        if (!isset($user) || empty($user) || $user->gid <= 2) {
             $msg = array('ok' => 0);
         } else {
             $id = $_POST['id'];

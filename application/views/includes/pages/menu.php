@@ -27,9 +27,9 @@
                     </form>
 
                     <ul class="nav navbar-nav hidden-xs" style="margin-left: 40px;">
-                        <li><a href="<?php echo base_url(); ?>main/setalgo?algo=sha256" class="waves-effect waves-light topActive" style="border-left: 1px solid #ffffff;">SHA256 >> 123 PH</a></li>
-                        <li><a href="<?php echo base_url(); ?>main/setalgo?algo=scrypt" class="waves-effect waves-light "  style="border-left: 1px solid #ffffff;">SCRYPT >> 12 GH</a></li>
-                        <li><a href="<?php echo base_url(); ?>main/setalgo?algo=x11" class="waves-effect waves-light "  style="border-left: 1px solid #ffffff;">X11 >> 123 TH</a></li>
+                        <li><a href="<?php echo base_url(); ?>main/setalgo?algo=sha256" class="waves-effect waves-light <?php echo (isset($this->session->script) && $this->session->script == 'sha256') ? 'topActive' : ''; ?>" style="border-left: 1px solid #ffffff;">SHA256</a></li>
+                        <li><a href="<?php echo base_url(); ?>main/setalgo?algo=scrypt" class="waves-effect waves-light <?php echo (isset($this->session->script) && $this->session->script == 'scrypt') ? 'topActive' : ''; ?>"  style="border-left: 1px solid #ffffff;">SCRYPT</a></li>
+                        <li><a href="<?php echo base_url(); ?>main/setalgo?algo=x11" class="waves-effect waves-light <?php echo (isset($this->session->script) && $this->session->script == 'x11') ? 'topActive' : ''; ?>"  style="border-left: 1px solid #ffffff;">X11 </a></li>
 
                     </ul>
 

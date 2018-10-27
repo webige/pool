@@ -28,6 +28,10 @@ class main extends CI_Controller {
             return false;
         }
 
+        if (!isset($this->session->script) || empty($this->session->script)) {
+            $this->session->script = 'sha256';
+        }
+
         $this->load->helper('userdesctop');
 
         $usd = getDesctop($user->id);
@@ -57,6 +61,25 @@ class main extends CI_Controller {
         }
 
         $this->load->view('index', $data);
+    }
+
+    public function setAlgo() {
+        $user = $this->session->userdata('user');
+        ;
+
+        if (!isset($user) || empty($user)) {
+            redirect(base_url());
+            return false;
+        }
+
+        if (isset($_GET['algo']) && !empty($_GET['algo'])) {
+            if ($_GET['algo'] == 'sha256' || $_GET['algo'] == 'scrypt' || $_GET['algo'] == 'x11') {
+                
+                $this->session->script = $_GET['algo'];
+            }
+        }
+        redirect(base_url());
+        return false;
     }
 
     public function getGroups() {
@@ -91,10 +114,9 @@ class main extends CI_Controller {
                 $this->mainmodel->openIframePosition($name, $desctop);
                 $json = $this->mainmodel->getIframeByName($name, $desctop);
 
-                
 
-        echo json_encode($json);
-      
+
+                echo json_encode($json);
             } else {
                 $json_ids = $this->input->post('ids');
                 if ($json_ids) {

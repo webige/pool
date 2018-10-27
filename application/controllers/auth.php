@@ -104,7 +104,8 @@ class auth extends CI_Controller {
 
         $google2fa = new PragmaRX\Google2FA\Google2FA;
         $key = $google2fa->generateSecretKey();
-        $post['google2fa_secret'] = $google2fa->generateSecretKey();
+
+        $post['google2fa_secret'] = $key;
 
 
         $this->load->model('authmodel');
@@ -134,10 +135,13 @@ class auth extends CI_Controller {
             redirect(base_url() . 'auth/register');
             return false;
         }
+        if (isset($post['islogin']) && $post['islogin'] == 1) {
+            $pass = $post['password'];
+        } else {
+            $pass = md5($post['password']);
+        }
 
-        $query = ' SELECT u.*, a.id AS user_id, a.coinid, a.last_earning, a.balance FROM users  AS u '
-                . ' LEFT JOIN `accounts` AS a ON a.username = u.name '
-                . ' WHERE email = ' . $this->db->escape($post['email']) . ' AND password = ' . $this->db->escape(md5($post['password'])) . ' ';
+        $query = ' SELECT * FROM users  WHERE email = ' . $this->db->escape($post['email']) . ' AND password = ' . $this->db->escape($pass) . ' ';
         $cntname = $this->db->query($query)->row();
         $google2fa = new PragmaRX\Google2FA\Google2FA;
         $google2fa->setAllowInsecureCallToGoogleApis(true);
@@ -155,50 +159,49 @@ class auth extends CI_Controller {
         $this->load->view('index', $data);
     }
 
-    public function login() {
-        $google2fa = new PragmaRX\Google2FA\Google2FA;
+    public function qrlogin_view() {
+
+        $data['title'] = 'QR validate';
+        $data['view'] = 'auth';
+        $data['view_pg'] = 'qrlogin';
+        $this->load->view('index', $data);
+    }
+
+    public function qrlogin() {
+
+        if ($this->session->qrvalidateuser) {
+            $user = $this->session->qrvalidateuser;
+        } else {
+            $this->session->set_flashdata('err_msg', 'User not found');
+            redirect(base_url() . 'auth/');
+            return false;
+        }
+
         $post = $_POST;
 
         if (!isset($post['secret']) || empty($post['secret'])) {
-
+            $this->session->unset_userdata('qrvalidateuser');
             $this->session->set_flashdata('err_msg', 'Secret key is empty');
-            redirect(base_url() . 'auth/register');
+            redirect(base_url() . 'auth/');
             return false;
         }
+        $google2fa = new PragmaRX\Google2FA\Google2FA;
 
-        if (!isset($post['email']) || !filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
-
-            $this->session->set_flashdata('err_msg', 'Email is not valid');
-            redirect(base_url() . 'auth/register');
-            return false;
-        }
-
-        $query111 = ' SELECT u.*, a.id AS user_id, a.coinid, a.last_earning, a.balance FROM users  AS u '
-                . ' LEFT JOIN `accounts` AS a ON a.username = u.name '
-                . ' WHERE email = ' . $this->db->escape($post['email']) . ' AND password = ' . $this->db->escape(md5($post['password'])) . ' ';
-        $query = ' SELECT * FROM users '
-                . ' WHERE email = ' . $this->db->escape($post['email']) . ' AND password = ' . $this->db->escape(md5($post['password'])) . ' ';
-
+        $query = ' SELECT * FROM users  WHERE id = ' . $this->db->escape($user) . '';
 
         $cntname = $this->db->query($query)->row();
-
         $secret = $post['secret'];
 
         $valid = $google2fa->verifyKey($cntname->google2fa_secret, $secret, 8);
 
 
         if (!$valid) {
-         
+            $this->session->unset_userdata('qrvalidateuser');
             $this->session->set_flashdata('err_msg', 'Secret Number is not valid');
-            redirect(base_url() . 'auth/register');
-            return false;
-        }
-
-        if (!$cntname) {
-            $this->session->set_flashdata('err_msg', 'Email or password do not match');
-            redirect(base_url() . 'auth/register');
+            redirect(base_url() . 'auth/');
             return false;
         } else {
+            $this->session->unset_userdata('qrvalidateuser');
             $data = file_get_contents(SECOND_URL . '/Cronjob/login?usrnm=' . $cntname->name);
             if ($data) {
                 $ddt = json_decode($data);
@@ -211,6 +214,60 @@ class auth extends CI_Controller {
             $this->session->set_userdata('user', $cntname);
             redirect(base_url() . 'index.php');
             return false;
+        }
+    }
+
+    public function login() {
+        $google2fa = new PragmaRX\Google2FA\Google2FA;
+        $post = $_POST;
+
+
+        if (!isset($post['email']) || !filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+
+            $this->session->set_flashdata('err_msg', 'Email is not valid');
+            redirect(base_url() . 'auth/');
+            return false;
+        }
+
+        if (!isset($post['password']) || empty($post['password'])) {
+
+            $this->session->set_flashdata('err_msg', 'Password is empty');
+            redirect(base_url() . 'auth/');
+            return false;
+        }
+
+        $query = ' SELECT * FROM users '
+                . ' WHERE email = ' . $this->db->escape($post['email']) . ' AND password = ' . $this->db->escape(md5($post['password'])) . ' ';
+
+
+
+        $cntname = $this->db->query($query)->row();
+
+        if (!$cntname) {
+            $this->session->set_flashdata('err_msg', 'Email or password do not match');
+            redirect(base_url() . 'auth/register');
+            return false;
+        } else {
+            if ($cntname && empty($cntname->google2fa_secret)) {
+
+                $key = $google2fa->generateSecretKey();
+
+                $query = ' UPDATE users SET google2fa_secret = ' . $this->db->escape($key) . ' WHERE id = ' . $cntname->id;
+                $this->db->query($query);
+
+                $post['email'] = $cntname->email;
+                $post['password'] = $cntname->password;
+                $post['islogin'] = 1;
+                $this->session->set_flashdata('good_msg', 'Registered Succesfully');
+                $this->session->set_flashdata('rpost', $post);
+                redirect(base_url() . 'auth/qrvalidate');
+                return false;
+            } else {
+
+                $this->session->qrvalidateuser = $cntname->id;
+                redirect(base_url() . 'auth/qrlogin_view');
+                return false;
+            }
         }
 
         return false;
